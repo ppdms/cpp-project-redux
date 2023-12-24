@@ -1,5 +1,5 @@
 #include "level.h"
-#include <sgg/graphics.h>
+#include <graphics.h>
 #include "player.h"
 
 /*

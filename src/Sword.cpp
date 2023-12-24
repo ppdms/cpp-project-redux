@@ -1,9 +1,9 @@
 #include "Sword.h"
-#include "sgg\graphics.h"
+#include "graphics.h"
 #include <iostream>
 
-void Sword::update()
-{ 
+void Sword::update(float dt)
+{
 }
 
 void Sword::draw()
@@ -20,19 +20,21 @@ void Sword::init()
 {
 }
 
-Sword::Sword(float x, float y, float w, float h, std::vector<Obstacle*>& obstacles): Box(x,y,w,h), obstaclesList(obstacles)
+Sword::Sword(float x, float y, float w, float h, std::string name) : Box(x, y, w, h), GameObject(name)
 {
 }
 
+/*
 bool Sword::collision_detected()
 {
 	// Check for any collion with Obstacles
 	for (Obstacle* ob : obstaclesList) {
 		if (intersect(*ob)) {
 			return true;
-			
+
 		}
 	}
 	return false;
-	
+
 }
+*/

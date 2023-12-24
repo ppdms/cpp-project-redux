@@ -4,7 +4,7 @@
 #include <vector>
 #include <list>
 #include <string>
-#include <sgg/graphics.h>
+#include <graphics.h>
 #include "player.h"
 
 class Level : public GameObject

@@ -3,14 +3,14 @@
 #include "Obstacle.h"
 #include "box.h"
 #include "Config.h"
-#include "sgg\graphics.h"
+#include "graphics.h"
 
 class Sword : public GameObject, public Box {
-	std::vector<Obstacle*>& obstaclesList;
+	//std::vector<Obstacle*>& obstaclesList;
 public:
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 	void init() override;
-	Sword(float x, float y, float w, float h, std::vector<Obstacle*>& obstacles);
-	bool collision_detected();
+	Sword(float x, float y, float w, float h, std::string name);
+	//bool collision_detected();
 };
