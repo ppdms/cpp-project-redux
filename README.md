@@ -24,3 +24,32 @@ Then it's (hopefully) as simple as:
     cmake CMakeLists.txt
     make
     ./bin/game
+
+# Building (Web / WebAssembly)
+The game also runs in the browser via Emscripten. The web build compiles the
+SGG sources vendored in `third_party/` (see `third_party/README.md` for the
+Emscripten deltas) instead of the prebuilt desktop `lib/*/libsgg.a` archives,
+and preloads `assets/` into the virtual filesystem.
+
+Prerequisites: the [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html)
+(`emcc` on `PATH`, e.g. via `source ~/emsdk/emsdk_env.sh`).
+
+    emcmake cmake -B build-web
+    cmake --build build-web
+    python3 -m http.server 8000
+
+Then open http://localhost:8000/web/index.html (any static file server works;
+the page must be served over HTTP, not `file://`, so the `.wasm` and `.data`
+files load). Click once to start; browsers require a user gesture before
+audio plays.
+
+Web audio notes: the build ships OGG Vorbis conversions (`assets/*.ogg`,
+regenerate from the WAVs with
+`ffmpeg -i x.wav -strict -2 -c:a vorbis -q:a 5 x.ogg` for music,
+`-q:a 3` for SFX) instead of the 55MB WAVs. Menu music and sound effects are
+in the preload bundle (cached in IndexedDB after the first visit);
+`castle_music.ogg`/`ending_theme.ogg` are staged to `web/assets/` and stream
+on first use.
+
+Desktop builds are unaffected: all web-specific code is behind
+`#ifdef __EMSCRIPTEN__`.

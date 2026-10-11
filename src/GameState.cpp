@@ -262,7 +262,11 @@ void GameState::update(float dt)
     float sleep_time = std::max(17.0f - dt, 0.0f);
     if (sleep_time > 0.0f)
     {
+#ifndef __EMSCRIPTEN__
+        // The browser drives the frame rate via requestAnimationFrame; blocking
+        // the main thread here would freeze the page.
         std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(sleep_time));
+#endif
     }
     switch (m_curr_lvl)
     {
@@ -309,9 +313,21 @@ void GameState::update(float dt)
         if (!m_curr_lvl_ptr)
         {
             // Go to the next level
+#ifdef __EMSCRIPTEN__
+            // No blocking wait on web: the loading screen stays up until the
+            // next frame's update calls init() again after a short delay.
+            static float loading_delay = 0.0f;
+            loading_delay += dt;
+            if (loading_delay < 1500.0f)
+                return;
+            loading_delay = 0.0f;
+            init();
+            return;
+#else
             std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(1500));
             init();
             return;
+#endif
         }
 
         m_curr_lvl_ptr->update(dt);

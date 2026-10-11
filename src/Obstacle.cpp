@@ -1,18 +1,5 @@
 #include "Obstacle.h"
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#ifdef _WIN64
-#include "sgg/graphics.h"
-#endif
-#elif __APPLE__
-#include <TargetConditionals.h>
-#if TARGET_OS_MAC
-#include "graphics.h"
-#endif
-#elif __linux__
-#include "graphics.h"
-#else
-#error "Unknown compiler"
-#endif
+#include "sgg_include.h"
 #include "util.h"
 
 Obstacle::Obstacle(float x, float y, float w, float h, float r, float g, float b, float a, std::string texture, std::string name) : Box(x, y, w, h), GameObject(name, "Obstacle"), texture(texture)

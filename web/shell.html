@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medieval Adventure: A Wizard's Chronicles</title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAANElEQVQ4jWNgGAWjYOg3kPkfNf8Z6P8z1P9m6P8z1P9m6P8z1P9m6P8z1P9m6P8z1P8AqDEBbUwsKkoAAAAASUVORK5CYII=">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #1a1a2e;
+    overflow: hidden;
+  }
+  #game-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+  }
+  canvas.game {
+    display: block;
+    background: #000;
+  }
+  #loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #eee;
+    font-family: sans-serif;
+    font-size: 18px;
+    text-align: center;
+    pointer-events: none;
+  }
+  #loading .bar {
+    width: 240px;
+    height: 8px;
+    margin-top: 12px;
+    background: #33334d;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  #loading .fill {
+    height: 100%;
+    width: 0%;
+    background: #c9a227;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div id="game-container">
+  <div id="loading">
+    <div id="loading-text">Loading&hellip;</div>
+    <div class="bar"><div class="fill" id="loading-fill"></div></div>
+  </div>
+  <canvas class="game" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+</div>
+<script>
+// Resize the drawing buffer to the window (device pixels) and let SDL turn it
+// into an SDL_WINDOWEVENT_RESIZED event, which SGG converts to its resize callback.
+function fitCanvas() {
+  var canvas = document.getElementById('canvas');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var w = Math.floor(window.innerWidth * dpr);
+  var h = Math.floor(window.innerHeight * dpr);
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+}
+window.addEventListener('resize', fitCanvas);
+
+var Module = {
+  canvas: document.getElementById('canvas'),
+  onRuntimeInitialized: function () {
+    document.getElementById('loading').style.display = 'none';
+    fitCanvas();
+  },
+  // Preload progress for the .data bundle (bytes downloaded / total).
+  setStatus: function (text) {
+    var m = /Downloading data\.\.\. \((\d+)\/(\d+)\)/.exec(text || '');
+    if (m) {
+      var done = parseInt(m[1], 10), total = parseInt(m[2], 10);
+      var pct = total > 0 ? Math.round(100 * done / total) : 0;
+      document.getElementById('loading-fill').style.width = pct + '%';
+      document.getElementById('loading-text').textContent =
+        'Loading assets ' + pct + '% (' +
+        (done / 1048576).toFixed(1) + ' / ' + (total / 1048576).toFixed(1) + ' MB)';
+    } else if (text) {
+      document.getElementById('loading-text').textContent = text.replace(/\.\.\.$/, '\u2026');
+    }
+  },
+  // Keep SDL from overriding our canvas size.
+  onCanvasSizeChanged: fitCanvas
+};
+fitCanvas();
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

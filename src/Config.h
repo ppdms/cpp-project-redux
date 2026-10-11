@@ -1,6 +1,9 @@
 #pragma once
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#ifdef __EMSCRIPTEN__
+// Emscripten preloads ./assets at the virtual filesystem root.
+#define ASSET_PATH "assets/"
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #ifdef _WIN64
 #define ASSET_PATH "assets/"
 #endif

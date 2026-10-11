@@ -11,7 +11,7 @@ bin/
 sgg
 build/
 .cmake/
-*.swp
+*~*.swp
 .idea/
 Tutorial.sln
 CMakeFiles/
@@ -21,3 +21,10 @@ Tutorial/x64
 */*.vcxproj.filters
 */*.vcxproj.user
 .vscode
+# Emscripten build outputs (source of truth is web/shell.html + CMakeLists.txt)
+web/index.html
+web/index.js
+web/index.wasm
+web/index.data
+# Deferred music staged by the build (copies of assets/*.ogg)
+web/assets/
