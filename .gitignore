@@ -8,7 +8,8 @@ build.ninja
 Game/
 Testing/
 bin/
-sgg
+# Root-level sgg build outputs only (must not match third_party/sgg/).
+/sgg/
 build/
 .cmake/
 *~*.swp
